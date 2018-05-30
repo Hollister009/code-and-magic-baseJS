@@ -1,0 +1,25 @@
+{
+  "name": "code-and-magic",
+  "version": "1.0.0",
+  "description": "Учебный проект «Код и Магия» от HTML Academy",
+  "author": "Andrew Zhukevych",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Hollister009/code-and-magic.git"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^3.9.0",
+    "eslint-config-htmlacademy": "^0.2.3"
+  },
+  "scripts": {
+    "test": "eslint js/"
+  },
+  "bugs": {
+    "url": "https://github.com/Hollister009/code-and-magic/issues"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": "^6.10"
+  }
+}
