@@ -63,14 +63,27 @@ window.renderStatistics = function (ctx, names, times) {
 
     for (var i = 0; i < arrTimes.length; i++) {
       dataHistogram.barHeight = arrTimes[i] * step;
+
+      ctx.fillStyle = fillBarColor(arrNames[i]);
       ctx.fillRect(initialX, initialY, dataHistogram.barWidth, -dataHistogram.barHeight);
+
+      ctx.fillStyle = '#000';
       ctx.fillText(arrNames[i], initialX, initialY + dataHistogram.offset);
       ctx.fillText(Math.round(arrTimes[i]), initialX, initialY - (dataHistogram.barHeight + dataHistogram.offset));
+
       initialX += dataHistogram.indent;
     }
   }
 
   drawHistogram(times, names);
 
-  // function getBarColor(arrNames){}
+  // Fill player stats in colors
+  function fillBarColor(player) {
+    var opacity = Math.random().toFixed(2);
+    if (player === 'Вы') {
+      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+    } else {
+      ctx.fillStyle = 'rgba(0, 0, 255, ' + opacity + ')';
+    }
+  }
 };
