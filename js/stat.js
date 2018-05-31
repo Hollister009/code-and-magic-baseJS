@@ -1,6 +1,6 @@
 'use strict';
 
-// Метод для отрисовки canvas
+// Method for drawing game results
 window.renderStatistics = function (ctx, names, times) {
   ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
   ctx.beginPath();
@@ -32,16 +32,45 @@ window.renderStatistics = function (ctx, names, times) {
 
   ctx.fillStyle = '#000';
   ctx.font = '16px PT Mono';
-  ctx.fillText('Hurrah... you win!', 120, 40);
+  ctx.fillText('Ура вы победили!', 120, 40);
+  ctx.fillText('Список результатов:', 120, 60);
 
-  var max = -1;
+  // Looking for worst result
+  function getMaxElement(arr) {
 
-  for (var i = 1; i < times.length; i++) {
-    var time = times[i];
-    if (time > max) {
-      max = time;
+    var max = -1;
+
+    for (var i = 1; i < arr.length; i++) {
+      var time = arr[i];
+      if (time > max) {
+        max = time;
+      }
+    }
+    return max;
+  }
+  // Drawing game histograms
+  function drawHistogram(arrTimes, arrNames) {
+
+    var dataHistogram = {
+      histogramHeight: 150,
+      barWidth: 40,
+      indent: 90,
+      offset: 15
+    };
+    var step = dataHistogram.histogramHeight / (getMaxElement(times) - 0);
+    var initialX = 150;
+    var initialY = 250;
+
+    for (var i = 0; i < arrTimes.length; i++) {
+      dataHistogram.barHeight = arrTimes[i] * step;
+      ctx.fillRect(initialX, initialY, dataHistogram.barWidth, -dataHistogram.barHeight);
+      ctx.fillText(arrNames[i], initialX, initialY + dataHistogram.offset);
+      ctx.fillText(Math.round(arrTimes[i]), initialX, initialY - (dataHistogram.barHeight + dataHistogram.offset));
+      initialX += dataHistogram.indent;
     }
   }
 
-  ctx.fillText('Worst time :', +max, 120, 40);
+  drawHistogram(times, names);
+
+  // function getBarColor(arrNames){}
 };
