@@ -3,14 +3,48 @@
 var setup = document.querySelector('.setup');
 var setupOpen = document.querySelector('.setup-open');
 var setupClose = setup.querySelector('.setup-close');
+var setupUserName = document.querySelector('.setup-user-name');
+
+var onPopupEscPress = function (evt) {
+  if (evt.keyCode === KEYCODE_ESC) {
+    if (document.activeElement !== setupUserName) {
+      setup.classList.add('hidden');
+    }
+  }
+};
+
+var openPopup = function () {
+  setup.classList.remove('hidden');
+  document.addEventListener('keydown', onPopupEscPress);
+};
+
+var closePopup = function () {
+  setup.classList.add('hidden');
+  document.removeEventListener('keydown', onPopupEscPress);
+};
 
 setupOpen.addEventListener('click', function () {
-  setup.classList.remove('hidden');
+  openPopup();
+});
+
+setupOpen.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === KEYCODE_ENTER) {
+    openPopup();
+  }
 });
 
 setupClose.addEventListener('click', function () {
-  setup.classList.add('hidden');
+  closePopup();
 });
+
+setupClose.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === KEYCODE_ENTER) {
+    closePopup();
+  }
+});
+
+var KEYCODE_ENTER = 13;
+var KEYCODE_ESC = 27;
 
 var WIZARD_NAMES = ['Иван', 'Хуан', 'Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
 var WIZARD_SURNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
