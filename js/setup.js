@@ -92,3 +92,26 @@ for (var i = 0; i < allWizards.length; i++) {
 similarListElement.appendChild(fragment);
 
 document.querySelector('.setup-similar').classList.remove('hidden');
+
+var playerCoat = setup.querySelector('.wizard-coat');
+var playerEyesColor = setup.querySelector('.wizard-eyes');
+var playerFireball = setup.querySelector('.setup-fireball-wrap');
+var FIREBALLS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
+var currentColor = 0;
+
+playerCoat.addEventListener('click', function () {
+  playerCoat.style.fill = getRandomElement(COAT_COLORS);
+});
+
+playerEyesColor.addEventListener('click', function () {
+  playerEyesColor.style.fill = getRandomElement(EYES_COLORS);
+});
+
+playerFireball.addEventListener('click', function () {
+  if (currentColor < FIREBALLS.length) {
+    playerFireball.style.background = FIREBALLS[currentColor];
+    currentColor++;
+  } else {
+    currentColor = 0;
+  }
+});
