@@ -66,4 +66,52 @@
     }
   });
 
+  // Draggable artifacts to inventory
+  var shopElement = document.querySelector('.setup-artifacts-shop');
+  var artifactsElement = document.querySelector('.setup-artifacts');
+  var draggedItem = null;
+
+  var onDragStart = function (evt) {
+    if (evt.target.tagName.toLowerCase() === 'img') {
+      draggedItem = evt.target;
+      evt.dataTransfer.setData('text/plain', evt.target.alt);
+    }
+    artifactsElement.style.outline = '2px dashed red';
+  };
+  shopElement.addEventListener('dragstart', onDragStart);
+
+  var onDragOver = function (evt) {
+    evt.preventDefault();
+    artifactsElement.removeAttribute('style');
+    return false;
+  };
+  artifactsElement.addEventListener('dragover', onDragOver);
+
+  var onDropEvent = function (evt) {
+    evt.target.style.backgroundColor = '';
+    evt.target.appendChild(draggedItem.cloneNode(true)).setAttribute('draggable', false);
+    evt.preventDefault();
+  };
+  artifactsElement.addEventListener('drop', onDropEvent);
+
+  var onDragEnter = function (evt) {
+    evt.target.style.backgroundColor = 'yellow';
+    evt.preventDefault();
+  };
+  artifactsElement.addEventListener('dragenter', onDragEnter);
+
+  var onDragLeave = function (evt) {
+    evt.target.style.backgroundColor = '';
+    evt.preventDefault();
+  };
+  artifactsElement.addEventListener('dragleave', onDragLeave);
+
+  var onStarRemove = function (evt) {
+    var node = evt.target;
+    if (node.tagName.toLowerCase() === 'img') {
+      node.parentNode.removeChild(node);
+    }
+  };
+  artifactsElement.addEventListener('click', onStarRemove);
+
 })();
