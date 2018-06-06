@@ -3,15 +3,19 @@
 (function () {
 
   // Wizards data
-  var WIZARD_NAMES = ['Иван', 'Хуан', 'Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
-  var WIZARD_SURNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
-  var COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
-  var EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
-  var allWizards = getWizzards(WIZARD_NAMES, WIZARD_SURNAMES, COAT_COLORS, EYES_COLORS);
+  var wizardData = {
+    NAMES: ['Иван', 'Хуан', 'Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'],
+    SURNAMES: ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'],
+    COATS: ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'],
+    EYES: ['black', 'red', 'blue', 'yellow', 'green'],
+    FIREBALLS: ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848']
+  };
 
-  function getWizzards(names, surnames, coatColors, eyesColors) {
+  // Create wizards array
+  var similiarWizardsNumber = 4;
+  var getWizards = function (names, surnames, coatColors, eyesColors) {
     var Wizards = [];
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < similiarWizardsNumber; i++) {
       Wizards[i] = {};
       var name = window.util.getRandomElement(names);
       var surname = window.util.getRandomElement(surnames);
@@ -20,7 +24,9 @@
       Wizards[i].eyesColor = window.util.getRandomElement(eyesColors);
     }
     return Wizards;
-  }
+  };
+
+  var allWizards = getWizards(wizardData.NAMES, wizardData.SURNAMES, wizardData.COATS, wizardData.EYES);
 
   // Setting up similiar wizards list
   document.querySelector('.setup-similar').classList.remove('hidden');
@@ -44,27 +50,20 @@
 
   // Player settings
   var playerCoat = window.dialog.querySelector('.wizard-coat');
-  var playerEyesColor = window.dialog.querySelector('.wizard-eyes');
+  var playerEyes = window.dialog.querySelector('.wizard-eyes');
   var playerFireball = window.dialog.querySelector('.setup-fireball-wrap');
-  var FIREBALLS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
-  var currentColor = 0;
 
-  playerCoat.addEventListener('click', function () {
-    playerCoat.style.fill = window.util.getRandomElement(COAT_COLORS);
-  });
+  var fillElement = function (element, color) {
+    element.style.fill = color;
+  };
 
-  playerEyesColor.addEventListener('click', function () {
-    playerEyesColor.style.fill = window.util.getRandomElement(EYES_COLORS);
-  });
+  var changeElementBackground = function (element, color) {
+    element.style.backgroundColor = color;
+  };
 
-  playerFireball.addEventListener('click', function () {
-    if (currentColor < FIREBALLS.length) {
-      playerFireball.style.background = FIREBALLS[currentColor];
-      currentColor++;
-    } else {
-      currentColor = 0;
-    }
-  });
+  window.colorizeElement(playerCoat, wizardData.COATS, fillElement);
+  window.colorizeElement(playerEyes, wizardData.EYES, fillElement);
+  window.colorizeElement(playerFireball, wizardData.FIREBALLS, changeElementBackground);
 
   // Draggable artifacts to inventory
   var shopElement = document.querySelector('.setup-artifacts-shop');
