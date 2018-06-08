@@ -12,8 +12,6 @@
   };
 
   // Setting up similiar wizards list
-  document.querySelector('.setup-similar').classList.remove('hidden');
-
   var similarListElement = document.querySelector('.setup-similar-list');
   var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
 
@@ -31,6 +29,8 @@
       fragment.appendChild(renderWizard(array[i]));
     }
     similarListElement.appendChild(fragment);
+
+    window.dialog.querySelector('.setup-similar').classList.remove('hidden');
   };
 
   // Player settings
@@ -99,7 +99,7 @@
   artifactsElement.addEventListener('click', onStarRemove);
 
   // Get wizards array from a server response
-  var url = 'https://js.dump.academy/code-and-magick/data';
+  var URL = 'https://js.dump.academy/code-and-magick/data';
 
   var similarWizardsNumber = 4;
   window.setup = {
@@ -109,15 +109,15 @@
       for (var j = 0; j < similarWizardsNumber; j++) {
         nextWizard = window.util.getRandomElement(data);
         if (superWizards.includes(nextWizard)) {
-          superWizards[j] = window.util.getRandomElement(data);
-        } else {
-          superWizards[j] = nextWizard;
+          var onIndex = superWizards.indexOf(nextWizard);
+          superWizards[onIndex] = window.util.getRandomElement(data);
         }
+        superWizards[j] = nextWizard;
       }
       return allWizards(superWizards);
     }
   };
 
-  window.load(url, window.setup.getJSONPData);
+  window.load(URL, window.setup.getJSONPData);
 
 })();
