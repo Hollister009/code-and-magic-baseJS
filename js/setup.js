@@ -11,23 +11,6 @@
     FIREBALLS: ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848']
   };
 
-  // Create wizards array
-  var similarWizardsNumber = 4;
-  var getWizards = function (names, surnames, coatColors, eyesColors) {
-    var Wizards = [];
-    for (var i = 0; i < similarWizardsNumber; i++) {
-      Wizards[i] = {};
-      var name = window.util.getRandomElement(names);
-      var surname = window.util.getRandomElement(surnames);
-      Wizards[i].name = window.util.getFullName(name, surname);
-      Wizards[i].coatColor = window.util.getRandomElement(coatColors);
-      Wizards[i].eyesColor = window.util.getRandomElement(eyesColors);
-    }
-    return Wizards;
-  };
-
-  var allWizards = getWizards(wizardData.NAMES, wizardData.SURNAMES, wizardData.COATS, wizardData.EYES);
-
   // Setting up similiar wizards list
   document.querySelector('.setup-similar').classList.remove('hidden');
 
@@ -37,16 +20,18 @@
   var renderWizard = function (wizard) {
     var wizardElement = similarWizardTemplate.cloneNode(true);
     wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
-    wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
-    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
+    wizardElement.querySelector('.wizard-coat').style.fill = wizard.colorCoat;
+    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.colorEyes;
     return wizardElement;
   };
 
-  var fragment = document.createDocumentFragment();
-  for (var i = 0; i < allWizards.length; i++) {
-    fragment.appendChild(renderWizard(allWizards[i]));
-  }
-  similarListElement.appendChild(fragment);
+  var allWizards = function (array) {
+    var fragment = document.createDocumentFragment();
+    for (var i = 0; i < array.length; i++) {
+      fragment.appendChild(renderWizard(array[i]));
+    }
+    similarListElement.appendChild(fragment);
+  };
 
   // Player settings
   var playerCoat = window.dialog.querySelector('.wizard-coat');
@@ -113,9 +98,10 @@
   };
   artifactsElement.addEventListener('click', onStarRemove);
 
-  // Setting up server response
+  // Get wizards array from a server response
   var url = 'https://js.dump.academy/code-and-magick/data';
 
+  var similarWizardsNumber = 4;
   window.setup = {
     getJSONPData: function (data) {
       var superWizards = [];
@@ -128,9 +114,10 @@
           superWizards[j] = nextWizard;
         }
       }
-      return superWizards;
+      return allWizards(superWizards);
     }
   };
 
   window.load(url, window.setup.getJSONPData);
+
 })();
