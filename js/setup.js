@@ -12,10 +12,10 @@
   };
 
   // Create wizards array
-  var similiarWizardsNumber = 4;
+  var similarWizardsNumber = 4;
   var getWizards = function (names, surnames, coatColors, eyesColors) {
     var Wizards = [];
-    for (var i = 0; i < similiarWizardsNumber; i++) {
+    for (var i = 0; i < similarWizardsNumber; i++) {
       Wizards[i] = {};
       var name = window.util.getRandomElement(names);
       var surname = window.util.getRandomElement(surnames);
@@ -113,4 +113,24 @@
   };
   artifactsElement.addEventListener('click', onStarRemove);
 
+  // Setting up server response
+  var url = 'https://js.dump.academy/code-and-magick/data';
+
+  window.setup = {
+    getJSONPData: function (data) {
+      var superWizards = [];
+      var nextWizard;
+      for (var j = 0; j < similarWizardsNumber; j++) {
+        nextWizard = window.util.getRandomElement(data);
+        if (superWizards.includes(nextWizard)) {
+          superWizards[j] = window.util.getRandomElement(data);
+        } else {
+          superWizards[j] = nextWizard;
+        }
+      }
+      return superWizards;
+    }
+  };
+
+  window.load(url, window.setup.getJSONPData);
 })();
