@@ -102,22 +102,19 @@
   var URL = 'https://js.dump.academy/code-and-magick/data';
 
   var similarWizardsNumber = 4;
-  window.setup = {
-    getJSONPData: function (data) {
-      var superWizards = [];
-      var nextWizard;
-      for (var j = 0; j < similarWizardsNumber; j++) {
-        nextWizard = window.util.getRandomElement(data);
-        if (superWizards.includes(nextWizard)) {
-          var onIndex = superWizards.indexOf(nextWizard);
-          superWizards[onIndex] = window.util.getRandomElement(data);
-        }
-        superWizards[j] = nextWizard;
+  var getAjaxResponse = function (data) {
+    var superWizards = [];
+    var nextWizard;
+    for (var j = 0; j < similarWizardsNumber; j++) {
+      nextWizard = window.util.getRandomElement(data);
+      if (superWizards.includes(nextWizard)) {
+        var onIndex = superWizards.indexOf(nextWizard);
+        superWizards[onIndex] = window.util.getRandomElement(data);
       }
-      return allWizards(superWizards);
+      superWizards[j] = nextWizard;
     }
+    return allWizards(superWizards);
   };
-
-  window.load(URL, window.setup.getJSONPData);
+  window.load(URL, getAjaxResponse);
 
 })();
