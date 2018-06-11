@@ -15,6 +15,21 @@
   var similarListElement = document.querySelector('.setup-similar-list');
   var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
 
+  var coatColor;
+  var eyesColor;
+  var wizards = [];
+
+  var getRank = function (wizard) {
+    var rank = 0;
+    if (wizard.colorCoat === coatColor) {
+      rank += 2;
+    }
+    if (wizard.colorEyes === eyesColor) {
+      rank += 1;
+    }
+    return rank;
+  };
+
   var renderWizard = function (wizard) {
     var wizardElement = similarWizardTemplate.cloneNode(true);
     wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
@@ -24,8 +39,9 @@
   };
 
   var allWizards = function (array) {
+    var similarLength = 4;
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < array.length; i++) {
+    for (var i = 0; i < similarLength; i++) {
       fragment.appendChild(renderWizard(array[i]));
     }
     similarListElement.appendChild(fragment);
@@ -33,9 +49,16 @@
     window.dialog.querySelector('.setup-similar').classList.remove('hidden');
   };
 
+  var updateWizards = function () {
+    allWizards(wizards.sort(function (left, right) {
+      return getRank(right) - getRank(left);
+    }));
+  };
+
   // Player settings
-  var playerCoat = window.dialog.querySelector('.wizard-coat');
-  var playerEyes = window.dialog.querySelector('.wizard-eyes');
+  var playerSetup = document.querySelector('.setup-wizard');
+  var playerCoat = playerSetup.querySelector('.wizard-coat');
+  var playerEyes = playerSetup.querySelector('.wizard-eyes');
   var playerFireball = window.dialog.querySelector('.setup-fireball-wrap');
 
   var fillElement = function (element, color) {
@@ -46,8 +69,21 @@
     element.style.backgroundColor = color;
   };
 
-  window.util.colorizeElement(playerCoat, wizardData.COATS, fillElement);
-  window.util.colorizeElement(playerEyes, wizardData.EYES, fillElement);
+  // click.evt ---> getRandomElement ---> fillFunc ---> updateWizards ---> allWizards(array.sort ---> getRank x2) ---> renderWizard
+  playerCoat.addEventListener('click', function () {
+    var newColor = window.util.getRandomElement(wizardData.COATS);
+    fillElement(playerCoat, newColor);
+    coatColor = newColor;
+    updateWizards();
+  });
+
+  playerEyes.addEventListener('click', function () {
+    var contactLens = window.util.getRandomElement(wizardData.EYES);
+    fillElement(playerEyes, contactLens);
+    eyesColor = contactLens;
+    updateWizards();
+  });
+
   window.util.colorizeElement(playerFireball, wizardData.FIREBALLS, changeElementBackground);
 
   // Draggable artifacts to inventory
@@ -102,7 +138,8 @@
   var URL = 'https://js.dump.academy/code-and-magick/data';
 
   var getAjaxResponse = function (data) {
-    return allWizards(data);
+    wizards = data;
+    updateWizards();
   };
 
   var onErrorHandler = function (message) {
