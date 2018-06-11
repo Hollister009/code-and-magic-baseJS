@@ -46,9 +46,9 @@
     element.style.backgroundColor = color;
   };
 
-  window.colorizeElement(playerCoat, wizardData.COATS, fillElement);
-  window.colorizeElement(playerEyes, wizardData.EYES, fillElement);
-  window.colorizeElement(playerFireball, wizardData.FIREBALLS, changeElementBackground);
+  window.util.colorizeElement(playerCoat, wizardData.COATS, fillElement);
+  window.util.colorizeElement(playerEyes, wizardData.EYES, fillElement);
+  window.util.colorizeElement(playerFireball, wizardData.FIREBALLS, changeElementBackground);
 
   // Draggable artifacts to inventory
   var shopElement = document.querySelector('.setup-artifacts-shop');
@@ -101,20 +101,23 @@
   // Get wizards array from a server response
   var URL = 'https://js.dump.academy/code-and-magick/data';
 
-  var similarWizardsNumber = 4;
   var getAjaxResponse = function (data) {
-    var superWizards = [];
-    var nextWizard;
-    for (var j = 0; j < similarWizardsNumber; j++) {
-      nextWizard = window.util.getRandomElement(data);
-      if (superWizards.includes(nextWizard)) {
-        var onIndex = superWizards.indexOf(nextWizard);
-        superWizards[onIndex] = window.util.getRandomElement(data);
-      }
-      superWizards[j] = nextWizard;
-    }
-    return allWizards(superWizards);
+    return allWizards(data);
   };
-  window.load(URL, getAjaxResponse);
+
+  var onErrorHandler = function (message) {
+    var errorHeader = document.createElement('div');
+    errorHeader.style = 'z-index: 100; margin: 0 auto; text-align: center';
+    errorHeader.style.color = '#000';
+    errorHeader.style.backgroundColor = '#da641a';
+    errorHeader.setAttribute('width', '100%');
+    errorHeader.setAttribute('height', '5vh');
+    errorHeader.style.fontSize = '25px';
+
+    errorHeader.textContent = message;
+    document.body.insertAdjacentElement('afterbegin', errorHeader);
+  };
+
+  window.load(URL, getAjaxResponse, onErrorHandler);
 
 })();
