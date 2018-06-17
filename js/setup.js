@@ -50,7 +50,8 @@
         fragment.appendChild(renderWizard(array[i]));
       }
       similarListElement.appendChild(fragment);
-    }
+    },
+    player: document.querySelector('.setup-wizard')
   };
 
   // Player settings
@@ -63,9 +64,22 @@
     element.style.fill = color;
   };
 
-  var changeElementBackground = function (element, color) {
+  var changeBackground = function (element, color) {
     element.style.backgroundColor = color;
   };
+
+  var playerName = window.dialog.querySelector('.setup-user-name');
+
+  // Get data from LocalStorage
+  window.addEventListener('load', function () {
+    var playerInfo = localStorage.getItem('playerInfo') ? JSON.parse(localStorage.getItem('playerInfo')) : {};
+    if (JSON.stringify(playerInfo) !== '{}') {
+      fillElement(playerCoat, playerInfo['coat-color']);
+      fillElement(playerEyes, playerInfo['eyes-color']);
+      changeBackground(playerFireball, playerInfo['fireball']);
+      playerName.value = playerInfo['username'];
+    }
+  });
 
   // click.evt ---> clearSimilarWizards ---> getRandomElement ---> fillFunc --->
   // onChange(updateWizards) ---> window.render.allWizards(array.sort ---> getRank x2) ---> renderWizard
@@ -81,7 +95,7 @@
     window.similar.onEyesChange(newColor);
   });
 
-  window.util.colorizeElement(playerFireball, wizardData.FIREBALLS, changeElementBackground);
+  window.util.colorizeElement(playerFireball, wizardData.FIREBALLS, changeBackground);
 
   // Draggable artifacts to inventory
   var shopElement = document.querySelector('.setup-artifacts-shop');
